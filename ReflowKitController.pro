@@ -11,15 +11,17 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = ReflowKitController
 TEMPLATE = app
 
+CONFIG += qwt
+INCLUDEPATH += /usr/local/qwt-6.0.3-svn/include
 
 SOURCES += main.cpp\
         mainwindow.cpp\
-uart.cpp \
+    uart.cpp \
     graphicaltemp.cpp \
     reflowcontroller.cpp
 
 HEADERS  += mainwindow.h\
-uart.h \
+    uart.h \
     graphicaltemp.h \
     reflowcontroller.h
 

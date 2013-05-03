@@ -7,6 +7,7 @@
 
 #include "graphicaltemp.h"
 #include "reflowcontroller.h"
+#include <qwt.h>
 
 namespace Ui {
 class MainWindow;

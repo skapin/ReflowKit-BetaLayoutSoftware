@@ -2,6 +2,7 @@
 #define REFLOWCONTROLLER_H
 
 #include <string>
+#include "uart.h"
 
 using namespace std;
 
@@ -11,6 +12,8 @@ public:
     ReflowController();
 
     string getAllInformation();
+    bool openDevice( string path );
+    void closeDevice();
 
     void setPhtTemp( int v );
     void setPhtTime( int v );
@@ -52,6 +55,7 @@ public:
 
     int getCurrentTemp();
 
+    bool _deviceOpen;
 private:
     int _phttemp;
     int _phttime;
@@ -73,6 +77,7 @@ private:
     int _tempshow;
 
     int _currentTemp;
+    Uart* _uart;
 
 };
 

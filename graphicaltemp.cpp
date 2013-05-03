@@ -18,7 +18,7 @@ void GraphicalTemp::paintEvent(QPaintEvent *)
     painter.setBackgroundMode(Qt::OpaqueMode);
     painter.setBackground(QBrush(Qt::white));
 
-    QRectF rectangle(0.0, 0.0, 600.0, 600.0);
+    QRectF rectangle(0.0, 0.0, 400.0, 400.0);
     int startAngle = 30 * 16;
     int spanAngle = 120 * 16;
     painter.drawArc(rectangle, startAngle, spanAngle);

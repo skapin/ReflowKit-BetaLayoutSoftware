@@ -64,6 +64,9 @@ int Uart::uartBaudRate2int( Uart::baud_rate baudrate)
 {
     switch( baudrate )
     {
+    case Uart::BR9600 :
+        return B9600;
+        break;
      case Uart::BR57600 :
         return B57600;
         break;

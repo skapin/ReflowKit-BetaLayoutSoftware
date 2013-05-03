@@ -21,6 +21,28 @@ ReflowController::ReflowController()
     _tempoffset=0;
     _currentTemp=0;
     _tempshow=2;
+    _deviceOpen = false;
+
+    this->openDevice( "/dev/ttyUSB0" );
+}
+
+bool ReflowController::openDevice(string path) {
+    _uart = new Uart( path );
+    if ( _uart->openDevice() < 0 )
+    {
+        _deviceOpen = false;
+    }
+    else
+    {
+        _deviceOpen = true;
+        _uart->setInterfaceAttrib(Uart::BR9600, 0);
+        _uart->setBlocking(0);
+    }
+    return _deviceOpen;
+}
+
+void ReflowController::closeDevice() {
+    _uart->closeDevice();
 }
 
 string ReflowController::getAllInformation()

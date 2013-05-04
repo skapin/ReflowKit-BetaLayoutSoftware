@@ -14,23 +14,16 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>30</x>
       <y>540</y>
       <width>170</width>
-      <height>25</height>
+      <height>44</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_3">
-     <item row="0" column="0">
-      <widget class="QLabel" name="refreshTimeLabel">
-       <property name="text">
-        <string>Refresh time (sec.) :  </string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="1">
       <widget class="QSpinBox" name="refreshTime">
        <property name="value">
@@ -38,9 +31,16 @@
        </property>
       </widget>
      </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="refreshTimeLabel">
+       <property name="text">
+        <string>Refresh time (sec.) :  </string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -73,7 +73,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>540</x>
@@ -98,7 +98,11 @@
       </widget>
      </item>
      <item row="0" column="2">
-      <widget class="QSpinBox" name="phttemp"/>
+      <widget class="QSpinBox" name="phttemp">
+       <property name="maximum">
+        <number>254</number>
+       </property>
+      </widget>
      </item>
      <item row="0" column="3">
       <widget class="QLabel" name="label_4">
@@ -108,7 +112,11 @@
       </widget>
      </item>
      <item row="0" column="4">
-      <widget class="QSpinBox" name="phttime"/>
+      <widget class="QSpinBox" name="phttime">
+       <property name="maximum">
+        <number>65534</number>
+       </property>
+      </widget>
      </item>
      <item row="0" column="5">
       <widget class="QLabel" name="label_5">
@@ -118,7 +126,14 @@
       </widget>
      </item>
      <item row="0" column="6">
-      <widget class="QSpinBox" name="phtpwr"/>
+      <widget class="QSpinBox" name="phtpwr">
+       <property name="minimum">
+        <number>0</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+      </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_15">
@@ -135,7 +150,11 @@
       </widget>
      </item>
      <item row="1" column="2">
-      <widget class="QSpinBox" name="soaktemp"/>
+      <widget class="QSpinBox" name="soaktemp">
+       <property name="maximum">
+        <number>254</number>
+       </property>
+      </widget>
      </item>
      <item row="1" column="3">
       <widget class="QLabel" name="label_14">
@@ -145,7 +164,11 @@
       </widget>
      </item>
      <item row="1" column="4">
-      <widget class="QSpinBox" name="soaktime"/>
+      <widget class="QSpinBox" name="soaktime">
+       <property name="maximum">
+        <number>65534</number>
+       </property>
+      </widget>
      </item>
      <item row="1" column="5">
       <widget class="QLabel" name="label_16">
@@ -155,7 +178,14 @@
       </widget>
      </item>
      <item row="1" column="6">
-      <widget class="QSpinBox" name="soakpwr"/>
+      <widget class="QSpinBox" name="soakpwr">
+       <property name="minimum">
+        <number>0</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+      </widget>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_19">
@@ -172,7 +202,11 @@
       </widget>
      </item>
      <item row="2" column="2">
-      <widget class="QSpinBox" name="reflowtemp"/>
+      <widget class="QSpinBox" name="reflowtemp">
+       <property name="maximum">
+        <number>254</number>
+       </property>
+      </widget>
      </item>
      <item row="2" column="3">
       <widget class="QLabel" name="label_18">
@@ -182,7 +216,11 @@
       </widget>
      </item>
      <item row="2" column="4">
-      <widget class="QSpinBox" name="reflowtime"/>
+      <widget class="QSpinBox" name="reflowtime">
+       <property name="maximum">
+        <number>65534</number>
+       </property>
+      </widget>
      </item>
      <item row="2" column="5">
       <widget class="QLabel" name="label_20">
@@ -192,7 +230,14 @@
       </widget>
      </item>
      <item row="2" column="6">
-      <widget class="QSpinBox" name="reflowpwr"/>
+      <widget class="QSpinBox" name="reflowpwr">
+       <property name="minimum">
+        <number>0</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+      </widget>
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_23">
@@ -209,7 +254,11 @@
       </widget>
      </item>
      <item row="3" column="2">
-      <widget class="QSpinBox" name="dwelltemp"/>
+      <widget class="QSpinBox" name="dwelltemp">
+       <property name="maximum">
+        <number>254</number>
+       </property>
+      </widget>
      </item>
      <item row="3" column="3">
       <widget class="QLabel" name="label_22">
@@ -219,7 +268,11 @@
       </widget>
      </item>
      <item row="3" column="4">
-      <widget class="QSpinBox" name="dwelltime"/>
+      <widget class="QSpinBox" name="dwelltime">
+       <property name="maximum">
+        <number>65534</number>
+       </property>
+      </widget>
      </item>
      <item row="3" column="5">
       <widget class="QLabel" name="label_24">
@@ -229,11 +282,18 @@
       </widget>
      </item>
      <item row="3" column="6">
-      <widget class="QSpinBox" name="dwellpwr"/>
+      <widget class="QSpinBox" name="dwellpwr">
+       <property name="minimum">
+        <number>0</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>541</x>
@@ -265,44 +325,32 @@
      </item>
     </layout>
    </widget>
-   <zorder>refreshTimeLabel</zorder>
-   <zorder>refreshTime</zorder>
-   <zorder>consoleOutput</zorder>
-   <zorder>consoleCommand</zorder>
-   <zorder>label</zorder>
-   <zorder>clearButton</zorder>
-   <zorder>pathToDevice</zorder>
-   <zorder>connectButton</zorder>
-   <zorder>temp</zorder>
-   <zorder>label_2</zorder>
-   <zorder>label_3</zorder>
-   <zorder>label_4</zorder>
-   <zorder>label_5</zorder>
-   <zorder>phttemp</zorder>
-   <zorder>phttime</zorder>
-   <zorder>phtpwr</zorder>
-   <zorder>label_14</zorder>
-   <zorder>soaktime</zorder>
-   <zorder>label_15</zorder>
-   <zorder>soaktemp</zorder>
-   <zorder>soakpwr</zorder>
-   <zorder>label_16</zorder>
-   <zorder>label_17</zorder>
-   <zorder>label_18</zorder>
-   <zorder>reflowtime</zorder>
-   <zorder>label_19</zorder>
-   <zorder>reflowtemp</zorder>
-   <zorder>reflowpwr</zorder>
-   <zorder>label_20</zorder>
-   <zorder>label_21</zorder>
-   <zorder>label_22</zorder>
-   <zorder>dwelltime</zorder>
-   <zorder>label_23</zorder>
-   <zorder>dwelltemp</zorder>
-   <zorder>dwellpwr</zorder>
-   <zorder>label_24</zorder>
-   <zorder>label_25</zorder>
-   <zorder>consoleOutput</zorder>
+   <widget class="QWidget" name="layoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>800</x>
+      <y>100</y>
+      <width>170</width>
+      <height>44</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_4">
+     <item row="0" column="1">
+      <widget class="QSpinBox" name="refreshTimeUi">
+       <property name="value">
+        <number>2</number>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="refreshTimeUiLabel">
+       <property name="text">
+        <string>Refresh time (sec.) :  </string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

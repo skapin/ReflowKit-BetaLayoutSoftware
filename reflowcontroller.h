@@ -14,6 +14,7 @@ public:
     string getAllInformation();
     bool openDevice( string path );
     void closeDevice();
+    Uart* getUartDevice();
 
     void setPhtTemp( int v );
     void setPhtTime( int v );

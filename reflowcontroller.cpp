@@ -41,6 +41,10 @@ bool ReflowController::openDevice(string path) {
     return _deviceOpen;
 }
 
+Uart* ReflowController::getUartDevice() {
+    return _uart;
+}
+
 void ReflowController::closeDevice() {
     _uart->closeDevice();
 }

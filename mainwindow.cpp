@@ -9,8 +9,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     updateUiComponents();//Update UI component value, based on ReflowController Value.
 
-    _graphTemp = new GraphicalTemp(400,400,this);
-    _graphTemp->setGeometry(50,50,400,400);
+    /*_graphTemp = new GraphicalTemp(400,400,this);
+    _graphTemp->setGeometry(50,50,400,400);*/
+
     _tempGraphTimer.start( ui->refreshTime->value() );
     connect( &_tempGraphTimer, SIGNAL(timeout()), this, SLOT(refreshTempGraph()) );
 

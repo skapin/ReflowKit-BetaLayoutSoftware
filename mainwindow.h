@@ -4,10 +4,10 @@
 #include <QMainWindow>
 #include <QTimer>
 #include <QPainter>
+#include <qwt_plot.h>
 
-#include "graphicaltemp.h"
 #include "reflowcontroller.h"
-#include <qwt.h>
+
 
 namespace Ui {
 class MainWindow;
@@ -50,7 +50,6 @@ private:
 
     QTimer _tempGraphTimer;
     QTimer _uiRefreshTimer;
-    GraphicalTemp* _graphTemp;
     ReflowController _reflowC;
 
 };

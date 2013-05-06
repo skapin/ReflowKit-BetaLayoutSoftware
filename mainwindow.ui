@@ -18,9 +18,9 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>550</y>
+      <y>560</y>
       <width>170</width>
-      <height>44</height>
+      <height>31</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_3">
@@ -43,7 +43,7 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>540</x>
       <y>10</y>
       <width>220</width>
       <height>45</height>
@@ -53,7 +53,7 @@
      <item row="0" column="0">
       <widget class="QPushButton" name="connectButton">
        <property name="text">
-        <string>Deconnected</string>
+        <string>Connect</string>
        </property>
       </widget>
      </item>
@@ -351,9 +351,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>70</y>
+      <y>0</y>
       <width>521</width>
-      <height>471</height>
+      <height>561</height>
      </rect>
     </property>
    </widget>

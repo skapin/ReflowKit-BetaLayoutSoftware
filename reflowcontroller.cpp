@@ -145,56 +145,80 @@ int ReflowController::getCurrentTemp() {
 }
 
 void ReflowController::setPhtTemp( int v ) {
-    if ( v >= 0 &&  v <= 254 )
+    if ( v >= 0 &&  v <= 254 ) {
         _phttemp = v;
+        _uart->send("phttemp"+QString::number(v).toStdString());
+    }
 }
 
 void ReflowController::setPhtTime( int v ) {
-    if ( v >= 0 &&  v <= 65534 )
+    if ( v >= 0 &&  v <= 65534 ) {
         _phttime = v;
+        _uart->send("phttime"+QString::number(v).toStdString());
+    }
 }
 
 void ReflowController::setPhtPwr( int v ) {
-    if ( v >= 0 &&  v <= 100 )
+    if ( v >= 0 &&  v <= 100 ) {
         _phtpwr = v;
+        _uart->send("phtpwr"+QString::number(v).toStdString());
+    }
 }
 void ReflowController::setSoakTemp( int v ) {
-    if ( v >= 0 &&  v <= 254 )
+    if ( v >= 0 &&  v <= 254 ) {
         _soaktemp = v;
+        _uart->send("soaktemp"+QString::number(v).toStdString());
+    }
 }
 void ReflowController::setSoakTime( int v ) {
-    if ( v >= 0 &&  v <= 65534 )
+    if ( v >= 0 &&  v <= 65534 ) {
         _soaktime = v;
+        _uart->send("soaktime"+QString::number(v).toStdString());
+    }
 }
 void ReflowController::setSoakPwr( int v ) {
-    if ( v >= 0 &&  v <= 100 )
+    if ( v >= 0 &&  v <= 100 ) {
         _soakpwr = v;
+        _uart->send("soaktpwr"+QString::number(v).toStdString());
+    }
 }
 
 void ReflowController::setReflowTemp( int v ) {
-    if ( v >= 0 &&  v <= 254 )
+    if ( v >= 0 &&  v <= 254 ) {
         _reflowtemp = v;
+        _uart->send("reflowtemp"+QString::number(v).toStdString());
+    }
 }
 void ReflowController::setReflowTime( int v ) {
-    if ( v >= 0 &&  v <= 65534 )
+    if ( v >= 0 &&  v <= 65534 ) {
         _reflowtime = v;
+        _uart->send("reflowtime"+QString::number(v).toStdString());
+    }
 }
 void ReflowController::setReflowPwr( int v ) {
-    if ( v >= 0 &&  v <= 100 )
+    if ( v >= 0 &&  v <= 100 ) {
         _reflowpwr = v;
+        _uart->send("reflowpwr"+QString::number(v).toStdString());
+    }
 }
 
 void ReflowController::setDwellTemp( int v ) {
-    if ( v >= 0 &&  v <= 254 )
+    if ( v >= 0 &&  v <= 254 ) {
         _dwelltemp = v;
+        _uart->send("dwelltemp"+QString::number(v).toStdString());
+    }
 }
 void ReflowController::setDwellTime( int v ) {
-    if ( v >= 0 &&  v <= 65534 )
+    if ( v >= 0 &&  v <= 65534 ) {
         _dwelltime = v;
+        _uart->send("dwelltime"+QString::number(v).toStdString());
+    }
 }
 void ReflowController::setDwellPwr( int v ) {
-   if ( v >= 0 &&  v <= 100 )
+   if ( v >= 0 &&  v <= 100 ) {
        _dwellpwr = v;
+       _uart->send("dwellpwr"+QString::number(v).toStdString());
+   }
 }
 
 

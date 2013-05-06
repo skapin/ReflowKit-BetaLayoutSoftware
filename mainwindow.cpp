@@ -64,14 +64,14 @@ void MainWindow::on_connectButton_clicked()
 {
     if ( _reflowC.getUartDevice()->isDeviceOpen() ) {
         _reflowC.closeDevice();
-        ui->connectButton->setText("Deconnected");
+        ui->connectButton->setText("Connect");
         ui->statusBar->showMessage("The device is disconnected.");
     }
     else {
         ui->statusBar->showMessage("Trying a connection to the device...");
         if ( _reflowC.openDevice( ui->pathToDevice->text().toStdString() ) )
         {
-            ui->connectButton->setText("Connected");
+            ui->connectButton->setText("Disconnect");
             ui->statusBar->showMessage("Device connected.");
         }
         else

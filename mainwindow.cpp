@@ -27,12 +27,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_refreshTime_valueChanged(int arg1)
 {
-    _tempGraphTimer.setInterval( arg1 );
+    _tempGraphTimer.setInterval( arg1*1000 );
     _reflowC.setTempShow( arg1 );
 
 }
 void MainWindow::updateUiComponents() {
-    _reflowC.parseUart();
+    _reflowC.checkUartDataReady();
     ui->phttemp->setValue( _reflowC.getPhtTemp() );
     ui->phttime->setValue( _reflowC.getPhtTime() );
     ui->phtpwr->setValue( _reflowC.getPhtPwr() );
@@ -52,8 +52,10 @@ void MainWindow::updateUiComponents() {
     QStringList* list = _reflowC.getDatas();
     QString s;
     QString s_all;
-    foreach( s, *list )
+
+    foreach( s, *list ) {
         s_all = s +s_all;
+    }
     ui->consoleOutput->setText( s_all );
 }
 
@@ -95,8 +97,15 @@ void MainWindow::on_consoleCommand_returnPressed()
 
 void MainWindow::refreshTempGraph()
 {
+    if ( ! _reflowC.getUartDevice()->isDeviceOpen() )
+        return;
     ui->temp->setText( QString::number(_reflowC.getCurrentTemp()) );
+    ui->graphTemp->setReflowCurve( _reflowC.getReflowTemp());
+    ui->graphTemp->setSoakCurve( _reflowC.getSoakTemp());
+    ui->graphTemp->setDWellCurve( _reflowC.getDwellTemp());
+    ui->graphTemp->setPhtCurve( _reflowC.getPhtTemp() );
 
+    ui->graphTemp->addTemp( _reflowC.getCurrentTemp() );
 }
 
 void MainWindow::on_clearButton_clicked()
@@ -166,5 +175,5 @@ void MainWindow::on_dwellpwr_valueChanged(int arg1)
 
 void MainWindow::on_refreshTimeUi_valueChanged(int arg1)
 {
-    _uiRefreshTimer.setInterval( arg1 );
+    _uiRefreshTimer.setInterval( arg1*1000 );
 }

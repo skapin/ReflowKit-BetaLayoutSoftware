@@ -22,7 +22,8 @@ public:
     void closeDevice();
     Uart* getUartDevice();
 
-    void parseUart();
+    void checkUartDataReady();
+    void parseUart(string data);
 
     void setPhtTemp( int v );
     void setPhtTime( int v );

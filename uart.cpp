@@ -32,8 +32,10 @@ void Uart::setPortName(string port_name) {
 
 void Uart::send(string data)
 {
+    string datas = data;
+    datas+="\n";
     if ( _device >= 0 )
-        write ( _device , data.c_str(), data.size()+1);
+        write ( _device , datas.c_str(), datas.size());
 }
 
 void Uart::send(int data)
@@ -52,16 +54,29 @@ bool Uart::isDeviceOpen()
     return _device >= 0;
 }
 
-string Uart::readData()
+bool Uart::readData()
 {
     if ( _device < 0 )
         return "Err.";
-    char buf [400] = {0};
-    int cmpt_read = read (_device, buf, 400);
-    if ( cmpt_read > 0)
-        return buf;
+    char buf [4096] = {0};
+    int cmpt_read = read (_device, buf, 4096);
+    if ( cmpt_read > 0) {
+        if ( buf[cmpt_read-1] =='\n' && buf[cmpt_read-2] =='\n' ) {
+            buf[cmpt_read-1] ='\0';
+            _bufferedData.append( buf );
+            return true;
+        }
+        else {
+            _bufferedData.append( buf );
+        }
+    }
     else
-        return "";
+        return false;
+}
+string Uart::getData() {
+    string data = _bufferedData;
+    _bufferedData = "";
+    return data;
 }
 
 int Uart::uartBaudRate2int( Uart::baud_rate baudrate)

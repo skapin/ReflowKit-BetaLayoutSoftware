@@ -64,13 +64,6 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0" colspan="2">
-      <widget class="QLabel" name="temp">
-       <property name="text">
-        <string>Temperature</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="layoutWidget">
@@ -362,6 +355,24 @@
       <width>521</width>
       <height>471</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="temp">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>90</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 96, 4);
+font: 75 italic 12pt &quot;Ubuntu&quot;;
+font: 75 oblique 9pt &quot;DejaVu Sans&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Temperature</string>
     </property>
    </widget>
   </widget>

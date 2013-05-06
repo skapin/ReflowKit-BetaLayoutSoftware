@@ -49,12 +49,15 @@ public:
 
     void send( string data );
     void send(int data);
-    string readData( );
+    bool readData( );
+    string getData();
+
 
 
 
 private:
     string _portName;
+    string _bufferedData;
     int _device;
     baud_rate _currentBaudRate;
 

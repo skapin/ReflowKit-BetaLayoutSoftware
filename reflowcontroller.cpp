@@ -1,7 +1,7 @@
 #include "reflowcontroller.h"
 
 
-int ReflowController::MAX_DATAS_STORED = 16;
+int ReflowController::MAX_DATAS_STORED = 32;
 
 ReflowController::ReflowController()
 {
@@ -39,6 +39,7 @@ bool ReflowController::openDevice(string path) {
     {
         _uart->setInterfaceAttrib(Uart::BR9600, 0);
         _uart->setBlocking(0);
+        _uart->send("showall");
     }
     return _uart->isDeviceOpen();
 }
@@ -47,40 +48,79 @@ QStringList* ReflowController::getDatas() {
     return _datas;
 }
 
-void ReflowController::parseUart( ) {
-
+void ReflowController::checkUartDataReady() {
     if ( ! _uart->isDeviceOpen() )
     {
         return;
     }
+    // is some UartData ready ?
+    if (_uart->readData() ) {
+        // Is the buffer Full ? (prevent Leak of memory and too much RAM used)
+        if ( _datas->size() > ReflowController::MAX_DATAS_STORED ) {
+            for ( int i=5; i>=0 ; i--) {
+                _datas->removeAt(i);
+            }
+
+        }
+        _datas->append( QString(_uart->getData().c_str()) );
+        parseUart( _datas->last().toStdString() );
+        // Addd uart data ready and delete them from Uart class (see Uart->getData())
+    }
+}
+
+void ReflowController::parseUart( string data ) {
+
     QRegExp temp_reg("(OFF|ON),\\s*(\\d+),\\s*.(\\d+),\\s*degC");
     QRegExp config_reg("([a-z]{3,})\\s*(\\d{1,})");
 
-    QString d(  (_uart->readData()).c_str() );
+    QString d( data.c_str() ) ;
 
-    // Is the buffer Full ? (prevent Leak of memory and too much RAM used)
-    if ( d.size() > ReflowController::MAX_DATAS_STORED )
-        d.remove( 0,5 );
-    _datas->append( d );
+
+
 
     //*********TEMP***********
 
     if (d.contains(temp_reg) ) {
-        _currentTemp = temp_reg.cap(1).toInt();
+        _currentTemp = temp_reg.cap(3).toInt();
         cout<<temp_reg.cap(3).toInt()<<" ==>CurrentTemp"<<endl;
 
     }
-    else
-        cout<<"IsNotTemp"<<endl;
-
     //********CONFIG**********
-    if ( d.contains(config_reg) ) {
-        cout<<config_reg.cap(0).toStdString()<<" <-Variable | Value-> "<<config_reg.cap(2).toInt()<<endl;
+    //if ( d.contains(config_reg) ) {
+    int pos = 0;
+    while ( (pos=config_reg.indexIn( d , pos )) != -1 ) {
+        //cout<<config_reg.cap(1).toStdString()<<"VALUE"<<config_reg.cap(2).toStdString()<<endl;
+        pos += config_reg.matchedLength();
+        string variable_name = config_reg.cap(1).toStdString();
+        int value = config_reg.cap(2).toInt();
 
+        if ( variable_name.compare("phttemp") == 0 )
+            _phttemp = value;
+        else if ( variable_name.compare("phttime") == 0 )
+            _phttime = value;
+        else if ( variable_name.compare("phtpwr") == 0 )
+            _phtpwr = value;
+        else if ( variable_name.compare("soaktemp") == 0 )
+            _soaktemp = value;
+        else if ( variable_name.compare("soaktime") == 0 )
+            _soaktime = value;
+        else if ( variable_name.compare("soakpwr") == 0 )
+            _soakpwr = value;
+        else if ( variable_name.compare("reflowtemp") == 0 )
+            _reflowtemp = value;
+        else if ( variable_name.compare("reflowtime") == 0 )
+            _reflowtime = value;
+        else if ( variable_name.compare("reflowpwr") == 0 )
+            _reflowpwr = value;
+        else if ( variable_name.compare("dwelltemp") == 0 )
+            _dwelltemp = value;
+        else if ( variable_name.compare("dwelltime") == 0 )
+            _dwelltime = value;
+        else if ( variable_name.compare("dwellpwr") == 0 )
+            _dwellpwr = value;
+        else
+            cout<<"UNKNOWN"<< variable_name <<endl;
     }
-    else
-        cout<<"IsNoConfig"<<endl;
-
 
 }
 

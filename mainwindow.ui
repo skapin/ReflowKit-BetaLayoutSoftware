@@ -53,7 +53,7 @@
      <item row="0" column="0">
       <widget class="QPushButton" name="connectButton">
        <property name="text">
-        <string>Disconnected</string>
+        <string>Deconnected</string>
        </property>
       </widget>
      </item>
@@ -330,15 +330,18 @@
      <rect>
       <x>800</x>
       <y>100</y>
-      <width>170</width>
+      <width>180</width>
       <height>44</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_4">
      <item row="0" column="1">
       <widget class="QSpinBox" name="refreshTimeUi">
+       <property name="maximum">
+        <number>100</number>
+       </property>
        <property name="value">
-        <number>2</number>
+        <number>1</number>
        </property>
       </widget>
      </item>

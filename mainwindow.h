@@ -8,6 +8,18 @@
 
 #include "reflowcontroller.h"
 
+/**
+ *              RS232
+ *                |
+ *               Uart
+ *                |
+ *        ReflowController--------GraphTemp
+ *                |                   |
+ *            MainWindow---------------
+ *
+ *
+ **/
+
 
 namespace Ui {
 class MainWindow;

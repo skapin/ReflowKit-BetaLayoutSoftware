@@ -1,5 +1,8 @@
 #include "reflowcontroller.h"
 
+
+int ReflowController::MAX_DATAS_STORED = 16;
+
 ReflowController::ReflowController()
 {
     _phttemp=0;
@@ -21,24 +24,64 @@ ReflowController::ReflowController()
     _tempoffset=0;
     _currentTemp=0;
     _tempshow=2;
-    _deviceOpen = false;
 
-    this->openDevice( "/dev/ttyUSB0" );
+    _datas = new QStringList();
+    _uart = new Uart();
 }
 
 bool ReflowController::openDevice(string path) {
     _uart = new Uart( path );
     if ( _uart->openDevice() < 0 )
     {
-        _deviceOpen = false;
+        return false;
     }
     else
     {
-        _deviceOpen = true;
         _uart->setInterfaceAttrib(Uart::BR9600, 0);
         _uart->setBlocking(0);
     }
-    return _deviceOpen;
+    return _uart->isDeviceOpen();
+}
+
+QStringList* ReflowController::getDatas() {
+    return _datas;
+}
+
+void ReflowController::parseUart( ) {
+
+    if ( ! _uart->isDeviceOpen() )
+    {
+        return;
+    }
+    QRegExp temp_reg("(OFF|ON),\\s*(\\d+),\\s*.(\\d+),\\s*degC");
+    QRegExp config_reg("([a-z]{3,})\\s*(\\d{1,})");
+
+    QString d(  (_uart->readData()).c_str() );
+
+    // Is the buffer Full ? (prevent Leak of memory and too much RAM used)
+    if ( d.size() > ReflowController::MAX_DATAS_STORED )
+        d.remove( 0,5 );
+    _datas->append( d );
+
+    //*********TEMP***********
+
+    if (d.contains(temp_reg) ) {
+        _currentTemp = temp_reg.cap(1).toInt();
+        cout<<temp_reg.cap(3).toInt()<<" ==>CurrentTemp"<<endl;
+
+    }
+    else
+        cout<<"IsNotTemp"<<endl;
+
+    //********CONFIG**********
+    if ( d.contains(config_reg) ) {
+        cout<<config_reg.cap(0).toStdString()<<" <-Variable | Value-> "<<config_reg.cap(2).toInt()<<endl;
+
+    }
+    else
+        cout<<"IsNoConfig"<<endl;
+
+
 }
 
 Uart* ReflowController::getUartDevice() {
@@ -53,6 +96,9 @@ string ReflowController::getAllInformation()
 {
     return "";
 }
+
+
+//******************** SET/GET***********************************************
 
 int ReflowController::getCurrentTemp() {
     return _currentTemp;
@@ -98,18 +144,15 @@ void ReflowController::setReflowPwr( int v ) {
         _reflowpwr = v;
 }
 
-void ReflowController::setDwellTemp( int v )
-{
+void ReflowController::setDwellTemp( int v ) {
     if ( v >= 0 &&  v <= 254 )
         _dwelltemp = v;
 }
-void ReflowController::setDwellTime( int v )
-{
+void ReflowController::setDwellTime( int v ) {
     if ( v >= 0 &&  v <= 65534 )
         _dwelltime = v;
 }
-void ReflowController::setDwellPwr( int v )
-{
+void ReflowController::setDwellPwr( int v ) {
    if ( v >= 0 &&  v <= 100 )
        _dwellpwr = v;
 }

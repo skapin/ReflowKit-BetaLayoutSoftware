@@ -36,10 +36,11 @@ public:
         BR1152000, BR1500000, BR2000000, BR2500000, BR3000000, BR3500000, BR4000000
     };
 
-    Uart( string portName );
+    Uart( string portName="" );
     ~Uart();
 
     int openDevice();
+    void setPortName( string port_name );
     void closeDevice();
     bool isDeviceOpen();
     int setInterfaceAttrib (Uart::baud_rate speed, int parity );

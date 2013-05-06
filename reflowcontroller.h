@@ -2,6 +2,12 @@
 #define REFLOWCONTROLLER_H
 
 #include <string>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <QRegExp>
+#include <QStringList>
+
 #include "uart.h"
 
 using namespace std;
@@ -15,6 +21,8 @@ public:
     bool openDevice( string path );
     void closeDevice();
     Uart* getUartDevice();
+
+    void parseUart();
 
     void setPhtTemp( int v );
     void setPhtTime( int v );
@@ -56,7 +64,8 @@ public:
 
     int getCurrentTemp();
 
-    bool _deviceOpen;
+    QStringList* getDatas();
+
 private:
     int _phttemp;
     int _phttime;
@@ -79,6 +88,8 @@ private:
 
     int _currentTemp;
     Uart* _uart;
+    static int MAX_DATAS_STORED;
+    QStringList* _datas;
 
 };
 

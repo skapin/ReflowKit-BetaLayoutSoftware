@@ -11,7 +11,7 @@ Uart::Uart(string portName)
 {
     _portName = portName;
     _currentBaudRate = Uart::BR115200;
-    _device = 0;
+    _device = -1;
 
 }
 Uart::~Uart()
@@ -24,6 +24,10 @@ int Uart::openDevice()
 {
     _device = open ( _portName.c_str(), O_RDWR | O_NOCTTY | O_SYNC);
     return _device;
+}
+
+void Uart::setPortName(string port_name) {
+    _portName = port_name;
 }
 
 void Uart::send(string data)
@@ -41,7 +45,7 @@ void Uart::closeDevice()
 {
     if ( _device >= 0)
         close( _device );
-    _device = 0;
+    _device = -1;
 }
 bool Uart::isDeviceOpen()
 {
@@ -52,8 +56,8 @@ string Uart::readData()
 {
     if ( _device < 0 )
         return "Err.";
-    char buf [100] = {0};
-    int cmpt_read = read (_device, buf, 11);
+    char buf [400] = {0};
+    int cmpt_read = read (_device, buf, 400);
     if ( cmpt_read > 0)
         return buf;
     else

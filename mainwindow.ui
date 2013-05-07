@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ReflowKitController</class>
- <widget class="QMainWindow" name="ReflowKitController">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -26,6 +26,9 @@
     <layout class="QGridLayout" name="gridLayout_3">
      <item row="0" column="1">
       <widget class="QSpinBox" name="refreshTime">
+       <property name="minimum">
+        <number>1</number>
+       </property>
        <property name="value">
         <number>2</number>
        </property>
@@ -330,6 +333,9 @@
     <layout class="QGridLayout" name="gridLayout_4">
      <item row="0" column="1">
       <widget class="QSpinBox" name="refreshTimeUi">
+       <property name="minimum">
+        <number>1</number>
+       </property>
        <property name="maximum">
         <number>100</number>
        </property>
@@ -402,7 +408,7 @@ background-color: rgb(255, 253, 255);</string>
      <string>Export CSV</string>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>540</x>
@@ -431,6 +437,20 @@ background-color: rgb(255, 253, 255);</string>
      </item>
     </layout>
    </widget>
+   <widget class="QPushButton" name="forceUpdate">
+    <property name="geometry">
+     <rect>
+      <x>770</x>
+      <y>50</y>
+      <width>91</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Force Update</string>
+    </property>
+   </widget>
+   <zorder>layoutWidget</zorder>
    <zorder>layoutWidget</zorder>
    <zorder>layoutWidget</zorder>
    <zorder>layoutWidget</zorder>
@@ -439,10 +459,8 @@ background-color: rgb(255, 253, 255);</string>
    <zorder>graphTemp</zorder>
    <zorder>temp</zorder>
    <zorder>learnButton</zorder>
-   <zorder>tempoffset</zorder>
-   <zorder>label_6</zorder>
-   <zorder>label_6</zorder>
    <zorder>pushButton</zorder>
+   <zorder>forceUpdate</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

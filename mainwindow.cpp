@@ -200,3 +200,9 @@ void MainWindow::on_pushButton_clicked()
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "./log_reflowkit.cvs");
     _reflowC.exportCVS( fileName.toStdString(), ',' );
 }
+
+void MainWindow::on_forceUpdate_clicked()
+{
+    _reflowC.updateInformation();
+    this->updateUiComponents();
+}

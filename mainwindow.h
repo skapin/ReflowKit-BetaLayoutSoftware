@@ -77,6 +77,8 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void on_forceUpdate_clicked();
+
 private:
     Ui::MainWindow *ui;
 

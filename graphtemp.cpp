@@ -1,12 +1,12 @@
 #include "graphtemp.h"
 
-int GraphTemp::MAX_SIZE_TEMP_LIST=300;
 
 GraphTemp::GraphTemp(QWidget *parent) :
     QwtPlot(parent)
 {
     setCanvasBackground(Qt::white);
-    _cmpTemp = 0;
+    _currentTime = 0.0;
+    _startTime = 0.0;
     _grid.attach( this );
     _tempCurve.attach( this );
 
@@ -29,7 +29,7 @@ GraphTemp::GraphTemp(QWidget *parent) :
 }
 
 void GraphTemp::setLine(QwtPlotCurve *curve, int value, QPen pen, string legendName) {
-    double x[2]= {0.0,(double)_cmpTemp};
+    double x[2]= {_startTime, _currentTime};
     double y[2] ={0.0,0.0};
     y[0] = y[1] = value;
 
@@ -59,15 +59,13 @@ void GraphTemp::setDWellCurve(int value) {
 }
 
 
-void GraphTemp::addTemp(int temp) {
-    if (_temps.size() >= MAX_SIZE_TEMP_LIST ) {
-        _temps.remove(0,1);
-        _times.remove(0,1);
-    }
-    _times.append( _cmpTemp );
-    _temps.append( temp );
-    _tempCurve.setSamples(_times.data(),_temps.data(), _temps.size() );
-    _cmpTemp++;
+void GraphTemp::setTempCurve( QVector<double>* temps, QVector<double>* times ) {
+    if ( temps == NULL || times == NULL )
+        return;
+    if ( times->empty() || temps->empty() )
+        return;
+    _currentTime = times->last();
+    _startTime = times->first();
+    _tempCurve.setSamples( times->data(), temps->data(), temps->size() );
     replot();
-
 }

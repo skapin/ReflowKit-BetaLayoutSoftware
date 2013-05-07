@@ -21,7 +21,7 @@ class GraphTemp : public QwtPlot
     Q_OBJECT
 public:
     explicit GraphTemp( QWidget *parent = 0 );
-    void addTemp( int temp );
+    void setTempCurve(QVector<double>* temps, QVector<double>* times );
     void setReflowCurve(int value);
     void setSoakCurve(int value);
     void setDWellCurve(int value);
@@ -40,10 +40,8 @@ private:
     QwtPlotCurve _soakCurve;
     QwtPlotCurve _dwellCurve;
 
-    QVector<double> _temps;
-    QVector<double> _times;
-    static int MAX_SIZE_TEMP_LIST;
-    int _cmpTemp;
+    double _startTime;
+    double _currentTime;
 };
 
 #endif // GRAPHTEMP_H

@@ -18,6 +18,10 @@ MainWindow::MainWindow(QWidget *parent) :
     // Update UI compoenent timer.
     _uiRefreshTimer.start( ui->refreshTimeUi->value()*1000);
     connect( &_uiRefreshTimer, SIGNAL(timeout()), this, SLOT(updateUiComponents()) );
+
+    // Timer for Reflowcontroller update (ask the showall command i.e updateInformation() )
+    _refreshReflowControllerTimer.start(30*1000);// 30 sec
+    connect( &_refreshReflowControllerTimer, SIGNAL(timeout()), &_reflowC, SLOT(updateInformation()) );
 }
 
 MainWindow::~MainWindow()
@@ -71,6 +75,7 @@ void MainWindow::on_connectButton_clicked()
         ui->statusBar->showMessage("Trying a connection to the device...");
         if ( _reflowC.openDevice( ui->pathToDevice->text().toStdString() ) )
         {
+            _reflowC.updateInformation();
             ui->connectButton->setText("Disconnect");
             ui->statusBar->showMessage("Device connected.");
         }
@@ -99,13 +104,14 @@ void MainWindow::refreshTempGraph()
 {
     if ( ! _reflowC.getUartDevice()->isDeviceOpen() )
         return;
+    // always set TempCurve 1st, cause it memorize the start and currentTime
+    ui->graphTemp->setTempCurve( _reflowC.getTemps(), _reflowC.getTimes() );
     ui->temp->setText( QString::number(_reflowC.getCurrentTemp()) );
     ui->graphTemp->setReflowCurve( _reflowC.getReflowTemp());
     ui->graphTemp->setSoakCurve( _reflowC.getSoakTemp());
     ui->graphTemp->setDWellCurve( _reflowC.getDwellTemp());
     ui->graphTemp->setPhtCurve( _reflowC.getPhtTemp() );
 
-    ui->graphTemp->addTemp( _reflowC.getCurrentTemp() );
 }
 
 void MainWindow::on_clearButton_clicked()
@@ -176,4 +182,20 @@ void MainWindow::on_dwellpwr_valueChanged(int arg1)
 void MainWindow::on_refreshTimeUi_valueChanged(int arg1)
 {
     _uiRefreshTimer.setInterval( arg1*1000 );
+}
+
+void MainWindow::on_learnButton_clicked()
+{
+    _reflowC.startLearning();
+}
+
+void MainWindow::on_tempoffset_valueChanged(int arg1)
+{
+    _reflowC.setTempoffset( arg1 );
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "./log_reflowkit.cvs");
+    _reflowC.exportCVS( fileName.toStdString(), ',' );
 }

@@ -4,11 +4,20 @@
 #include <QMainWindow>
 #include <QTimer>
 #include <QPainter>
+#include <QFileDialog>
 #include <qwt_plot.h>
 
 #include "reflowcontroller.h"
-
 /**
+ * @author Florian Boudinet
+ * @since May 2013
+ *
+ * florian.boudinet@gmail.com
+ * fboudinet.frenchdev.com
+ * GitHub : SkapiN
+ *
+ * Schema :
+ *
  *              RS232
  *                |
  *               Uart
@@ -18,6 +27,11 @@
  *            MainWindow---------------
  *
  *
+ *
+ * BaudRate 9600
+ * Device used : ReflowKit BetaLayout.
+ *
+ * Works fine on Linux 32/64Bit, ( Ubuntu 12.x and Debian (Wheezy) ).
  **/
 
 
@@ -57,9 +71,16 @@ private slots:
 
     void on_consoleCommand_returnPressed();
 
+    void on_learnButton_clicked();
+
+    void on_tempoffset_valueChanged(int arg1);
+
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 
+    QTimer _refreshReflowControllerTimer;
     QTimer _tempGraphTimer;
     QTimer _uiRefreshTimer;
     ReflowController _reflowC;

@@ -26,7 +26,7 @@ public:
     void setSoakCurve(int value);
     void setDWellCurve(int value);
     void setPhtCurve(int value);
-    void setLine(QwtPlotCurve* curve, int value, QPen pen, string legendName);
+    void setLine(QwtPlotCurve* curve, int value, string legendName);
     
 signals:
     

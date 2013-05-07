@@ -106,7 +106,7 @@ void ReflowController::addTemp(double temp, double time) {
 void ReflowController::parseUart( string data ) {
 
     QRegExp temp_reg("(OFF|ON),\\s*(\\d+),\\s*.(\\d+),\\s*degC");
-    QRegExp config_reg("([a-z]{3,})\\s*(\\d{1,})");
+    QRegExp config_reg("([a-z+-]{3,})\\s*(\\d{1,})");
 
     QString d( data.c_str() ) ;
     int pos = 0;
@@ -152,6 +152,12 @@ void ReflowController::parseUart( string data ) {
             _dwelltime = value;
         else if ( variable_name.compare("dwellpwr") == 0 )
             _dwellpwr = value;
+        else if ( variable_name.compare("tempoffset+") == 0 )
+            _tempoffset = value;
+        else if ( variable_name.compare("tempoffset-") == 0 )
+            _tempoffset = -value;
+        else if ( variable_name.compare("tempoffset") == 0 )
+            _tempoffset = value;
     }
 
 }

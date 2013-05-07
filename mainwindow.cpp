@@ -6,7 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this); // setup the UI
-
+    setWindowTitle("ReflowKit Controller");
     updateUiComponents();//Update UI component value, based on ReflowController Value.
 
     /*_graphTemp = new GraphicalTemp(400,400,this);
@@ -52,6 +52,7 @@ void MainWindow::updateUiComponents() {
     ui->dwelltemp->setValue( _reflowC.getDwellTemp() );
     ui->dwelltime->setValue( _reflowC.getDwellTime() );
     ui->dwellpwr->setValue( _reflowC.getDwellPwr() );
+    ui->tempoffset->setValue( _reflowC.getTempoffset() );
 
     QStringList* list = _reflowC.getDatas();
     QString s;

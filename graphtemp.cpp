@@ -7,55 +7,67 @@ GraphTemp::GraphTemp(QWidget *parent) :
     setCanvasBackground(Qt::white);
     _currentTime = 0.0;
     _startTime = 0.0;
+    _grid.enableX( false );
+    _grid.setPen( QPen(Qt::gray, 1));
     _grid.attach( this );
     _tempCurve.attach( this );
 
 
     _legend.setFrameStyle(QFrame::Box|QFrame::Sunken);
     this->insertLegend(&_legend, QwtPlot::BottomLegend);
-    // Define the QPEn for the curve
+
+    // define the QPen for each Curve
+    _reflowCurve.setPen( QPen(Qt::darkGreen,2, Qt::DashLine) );
+    _phtCurve.setPen( QPen(Qt::darkYellow,2, Qt::DashDotLine) );
+    _soakCurve.setPen( QPen(Qt::red,2, Qt::DashDotDotLine) );
+    _dwellCurve.setPen( QPen(Qt::darkCyan,2, Qt::DotLine) );
+
     QPen pen;
     pen.setWidth(3);
-    pen.setBrush(Qt::green);
+    pen.setBrush(Qt::darkCyan);
     pen.setCapStyle(Qt::RoundCap);
     pen.setJoinStyle(Qt::RoundJoin);
-
     _tempCurve.setPen( pen );
+
+    // Define the brush ( color under the curve)
+    QColor tempcolor( Qt::darkCyan );
+    tempcolor.setAlpha( 40 );
     _tempCurve.setTitle( "currentTemp" );
+    _tempCurve.setBrush( tempcolor );
 
     // Fixe the X/Y axis scale
     this->setAxisScale(QwtPlot::yLeft,0.0,300.0,25.0);
+
     replot();
 }
 
-void GraphTemp::setLine(QwtPlotCurve *curve, int value, QPen pen, string legendName) {
+void GraphTemp::setLine(QwtPlotCurve *curve, int value, string legendName) {
     double x[2]= {_startTime, _currentTime};
     double y[2] ={0.0,0.0};
     y[0] = y[1] = value;
 
     curve->setSamples( x,y ,2 );
 
-    curve->setPen( pen );
     curve->setTitle( (legendName+" "+(QString::number(value)).toStdString()).c_str() );
     curve->attach( this );
 
 }
 
 void GraphTemp::setReflowCurve(int value) {
-    setLine( &_reflowCurve, value, QPen(Qt::blue,3, Qt::DashLine), "Reflow" );
+    setLine( &_reflowCurve, value, "Reflow" );
 }
 
 void GraphTemp::setPhtCurve(int value) {
-    setLine( &_phtCurve, value, QPen(Qt::darkYellow,3, Qt::DashDotLine), "Pht" );
+    setLine( &_phtCurve, value, "Pht" );
 }
 
 void GraphTemp::setSoakCurve(int value) {
-    setLine( &_soakCurve, value, QPen(Qt::red,3, Qt::DashDotDotLine), "Soak" );
+    setLine( &_soakCurve, value, "Soak" );
 }
 
 
 void GraphTemp::setDWellCurve(int value) {
-    setLine( &_dwellCurve, value, QPen(Qt::darkCyan,3, Qt::DotLine), "Dwell" );
+    setLine( &_dwellCurve, value, "Dwell" );
 }
 
 

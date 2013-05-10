@@ -1,29 +1,59 @@
 #include "uart.h"
 
-#include <termios.h>
-#include <unistd.h>
 #include <stdio.h>
 #include <string.h>
 #include <sstream>
 #include <iostream>
 
+#ifdef unix
+#include <termios.h>
+#include <unistd.h>
+#endif
+#ifdef WIN32
+#include <Windows.h>
+#endif
+
+/*
+ #ifdef WIN32
+
+ #endif
+ #ifdef unix
+
+ #endif
+ */
+
 Uart::Uart(string portName)
 {
     _portName = portName;
     _currentBaudRate = Uart::BR115200;
-    _device = -1;
+    _device = NULL;
 
 }
 Uart::~Uart()
 {
-    if ( _device >= 0)
-        close( _device );
+    closeDevice();
 }
 
 int Uart::openDevice()
 {
-    _device = open ( _portName.c_str(), O_RDWR | O_NOCTTY | O_SYNC);
-    return _device;
+
+#ifdef WIN32
+
+    _device = CreateFile( L"COM4", GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+    if ( _device == INVALID_HANDLE_VALUE)
+    {
+        if ( GetLastError() == ERROR_FILE_NOT_FOUND)
+        {
+            _device = NULL;
+        }
+        _device = NULL;
+    }
+#endif
+#ifdef unix
+    _device = malloc( sizeof(int) );
+    *((int*)_device) = (open ( _portName.c_str(), O_RDWR | O_NOCTTY | O_SYNC));
+#endif
+    return _device != NULL;
 }
 
 void Uart::setPortName(string port_name) {
@@ -34,32 +64,65 @@ void Uart::send(string data)
 {
     string datas = data;
     datas+="\n";
-    if ( _device >= 0 )
-        write ( _device , datas.c_str(), datas.size());
+    if ( isDeviceOpen() ) {
+#ifdef WIN32
+        unsigned long cmpt_read;
+        if (!WriteFile( _device, datas.c_str(), datas.size(), &cmpt_read, NULL)) {
+        }
+#endif
+#ifdef unix
+        write ( *((int*)(_device)) , datas.c_str(), datas.size());
+#endif
+
+    }
 }
 
 void Uart::send(int data)
 {
-    write ( _device , &data, 1);
+#ifdef WIN32
+    if (!WriteFile( _device, &data, 1, NULL, NULL)) {
+
+    }
+
+#endif
+#ifdef unix
+    write ( *(int*)_device , &data, 1);
+#endif
 }
 
 void Uart::closeDevice()
 {
-    if ( _device >= 0)
-        close( _device );
-    _device = -1;
+    if ( isDeviceOpen() ) {
+#ifdef WIN32
+        CloseHandle( (HANDLE)_device );
+#endif
+#ifdef unix
+        close( *(int*)_device );
+#endif
+    }
 }
 bool Uart::isDeviceOpen()
 {
-    return _device >= 0;
+    return _device != NULL;
 }
 
 bool Uart::readData()
 {
-    if ( _device < 0 )
-        return "Err.";
-    char buf [4096] = {0};
-    int cmpt_read = read (_device, buf, 4096);
+    unsigned long cmpt_read = 0;
+    char buf[4096] = {0};
+    if ( !isDeviceOpen() )
+        return false;
+#ifdef WIN32
+    if (!ReadFile( _device, buf, 4096, &cmpt_read, NULL))
+    {
+        int LastError = GetLastError() ;
+        cerr<<"Error read file : "<<LastError<<endl;
+        return false;
+    }
+#endif
+#ifdef unix
+    cmpt_read = read (*(int*)_device, buf, 4096);
+#endif
     if ( cmpt_read > 0) {
         if ( buf[cmpt_read-1] =='\n' && buf[cmpt_read-2] =='\n' ) {
             buf[cmpt_read-1] ='\0';
@@ -70,8 +133,9 @@ bool Uart::readData()
             _bufferedData.append( buf );
         }
     }
-    else
+    else {
         return false;
+    }
 }
 string Uart::getData() {
     string data = _bufferedData;
@@ -81,12 +145,30 @@ string Uart::getData() {
 
 int Uart::uartBaudRate2int( Uart::baud_rate baudrate)
 {
+#ifdef WIN32
+    switch( baudrate )
+    {
+    case Uart::BR9600 :
+        return CBR_9600;
+        break;
+    case Uart::BR57600 :
+        return CBR_57600;
+        break;
+    case Uart:: BR115200:
+        return CBR_115200;
+        break;
+    default :
+        return CBR_9600;
+        break;
+    }
+#endif
+#ifdef unix
     switch( baudrate )
     {
     case Uart::BR9600 :
         return B9600;
         break;
-     case Uart::BR57600 :
+    case Uart::BR57600 :
         return B57600;
         break;
     case Uart:: BR115200:
@@ -135,13 +217,34 @@ int Uart::uartBaudRate2int( Uart::baud_rate baudrate)
         return B115200;
         break;
     }
+#endif
 }
 
 int Uart::setInterfaceAttrib ( Uart::baud_rate speed, int parity )
 {
-    struct termios tty;
+
+#ifdef WIN32
+
+    DCB dcbSerialParams = {0};
+    // set com port settings
+    dcbSerialParams.DCBlength = sizeof(dcbSerialParams);
+    if (!GetCommState( _device, &dcbSerialParams))
+    {
+        cout<<"Error get setting"<<endl;
+    }
+    dcbSerialParams.BaudRate = uartBaudRate2int(speed);
+    dcbSerialParams.ByteSize = 8;
+    dcbSerialParams.StopBits = ONESTOPBIT;
+    dcbSerialParams.Parity = parity;
+    if (!SetCommState(_device, &dcbSerialParams))
+    {
+        cout<<"Error set setting"<<endl;
+    }
+#endif
+#ifdef unix
+     struct termios tty;
     memset (&tty, 0, sizeof tty);
-    if (tcgetattr (_device, &tty) != 0)
+    if (tcgetattr (*(int*)_device, &tty) != 0)
     {
         return -1;
     }
@@ -168,19 +271,36 @@ int Uart::setInterfaceAttrib ( Uart::baud_rate speed, int parity )
     tty.c_cflag &= ~CSTOPB;
     tty.c_cflag &= ~CRTSCTS;
 
-    if (tcsetattr (_device, TCSANOW, &tty) != 0)
+    if (tcsetattr (*(int*)_device, TCSANOW, &tty) != 0)
     {
         return -1;
     }
     return 0;
+#endif
+    return -1;
 }
 
 
 void Uart::setBlocking ( int should_block )
 {
+#ifdef WIN32
+    COMMTIMEOUTS timeouts={0};
+    // set com port timeouts
+    timeouts.ReadIntervalTimeout = MAXDWORD;
+    timeouts.ReadTotalTimeoutConstant = 50;
+    timeouts.ReadTotalTimeoutMultiplier = 10;
+    timeouts.WriteTotalTimeoutConstant = 50;
+    timeouts.WriteTotalTimeoutMultiplier = 10;
+    if (!SetCommTimeouts(_device, &timeouts))
+    {
+        cout<<"Error ssetting timeout"<<endl;
+//        msg.setText("Could not set GPS COM port timeouts!");
+    }
+#endif
+#ifdef unix
     struct termios tty;
     memset (&tty, 0, sizeof tty);
-    if (tcgetattr (_device, &tty) != 0)
+    if (tcgetattr (*(int*)_device, &tty) != 0)
     {
         return;
     }
@@ -188,7 +308,8 @@ void Uart::setBlocking ( int should_block )
     tty.c_cc[VMIN]  = should_block ? 1 : 0;
     tty.c_cc[VTIME] = 5;            // 0.5 seconds read timeout
 
-    if (tcsetattr (_device, TCSANOW, &tty) != 0)
+    if (tcsetattr (*(int*)_device, TCSANOW, &tty) != 0)
         return;
+#endif
 }
 

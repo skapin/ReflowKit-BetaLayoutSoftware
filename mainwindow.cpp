@@ -22,6 +22,9 @@ MainWindow::MainWindow(QWidget *parent) :
     // Timer for Reflowcontroller update (ask the showall command i.e updateInformation() )
     _refreshReflowControllerTimer.start(30*1000);// 30 sec
     connect( &_refreshReflowControllerTimer, SIGNAL(timeout()), &_reflowC, SLOT(updateInformation()) );
+    ui->frameGraphTempSlider->setMaximum( _reflowC.getTemps()->size()-1 ); // maximum of data stored, i.e max of data show :)
+
+    connect( ui->frameGraphTempSlider, SIGNAL(valueChanged(int)),  ui->graphTemp, SLOT(setTimeFrameOfset(int)) );
 }
 
 MainWindow::~MainWindow()
@@ -37,6 +40,9 @@ void MainWindow::on_refreshTime_valueChanged(int arg1)
 }
 void MainWindow::updateUiComponents() {
     _reflowC.checkUartDataReady();
+
+    ui->frameGraphTempSlider->setMaximum( _reflowC.getTemps()->size()-1 ); // maximum of data stored, i.e max of data show :)
+
     ui->phttemp->setValue( _reflowC.getPhtTemp() );
     ui->phttime->setValue( _reflowC.getPhtTime() );
     ui->phtpwr->setValue( _reflowC.getPhtPwr() );

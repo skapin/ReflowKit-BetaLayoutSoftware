@@ -359,7 +359,7 @@
       <x>10</x>
       <y>0</y>
       <width>521</width>
-      <height>561</height>
+      <height>531</height>
      </rect>
     </property>
    </widget>
@@ -450,6 +450,19 @@ background-color: rgb(255, 253, 255);</string>
      <string>Force Update</string>
     </property>
    </widget>
+   <widget class="QSlider" name="frameGraphTempSlider">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>530</y>
+      <width>521</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
    <zorder>layoutWidget</zorder>
    <zorder>layoutWidget</zorder>
    <zorder>layoutWidget</zorder>
@@ -461,6 +474,7 @@ background-color: rgb(255, 253, 255);</string>
    <zorder>learnButton</zorder>
    <zorder>pushButton</zorder>
    <zorder>forceUpdate</zorder>
+   <zorder>frameGraphTempSlider</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

@@ -20,7 +20,7 @@ class ReflowController : public QObject
     Q_OBJECT
 public:
     /**
-     * @brief MAX_SIZE_TEMP_LIST maximum number of tmeps to memorized. i.e the maximum item inside QVector<double> _temps/_times.
+     * @brief MAX_SIZE_TEMP_LIST maximum number of temps to memorized. i.e the maximum item inside QVector<double> _temps/_times.
      */
     static int MAX_SIZE_TEMP_LIST;
 

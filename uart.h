@@ -17,8 +17,13 @@
 
 
 #include <errno.h>
-#include <termios.h>
-#include <unistd.h>
+#ifdef UNIX
+    #include <termios.h>
+    #include <unistd.h>
+#endif
+#ifdef WIN32
+    #include <Windows.h>
+#endif
 #include <cstdlib>
 #include <string>
 #include <stdio.h>
@@ -58,7 +63,7 @@ public:
 private:
     string _portName;
     string _bufferedData;
-    int _device;
+    void* _device;
     baud_rate _currentBaudRate;
 
 };

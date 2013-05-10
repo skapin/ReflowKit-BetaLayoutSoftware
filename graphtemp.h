@@ -5,6 +5,10 @@
  * Display a grah about reflowkit temperature.
  *
  **/
+#ifdef WIN32
+    #define QWT_DLL
+#endif
+
 #include <QWidget>
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -31,6 +35,7 @@ public:
 signals:
     
 public slots:
+    void setTimeFrameOfset( int offset );
 private:
     QwtPlotGrid _grid;
     QwtLegend _legend;
@@ -42,6 +47,7 @@ private:
 
     double _startTime;
     double _currentTime;
+    int _timesFrameOffset;
 };
 
 #endif // GRAPHTEMP_H

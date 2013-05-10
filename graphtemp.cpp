@@ -41,8 +41,12 @@ GraphTemp::GraphTemp(QWidget *parent) :
     replot();
 }
 
+void GraphTemp::setTimeFrameOfset(int offset) {
+    _timesFrameOffset = offset;
+}
+
 void GraphTemp::setLine(QwtPlotCurve *curve, int value, string legendName) {
-    double x[2]= {_startTime, _currentTime};
+    double x[2]= {_startTime+_timesFrameOffset, _currentTime};
     double y[2] ={0.0,0.0};
     y[0] = y[1] = value;
 
@@ -76,8 +80,14 @@ void GraphTemp::setTempCurve( QVector<double>* temps, QVector<double>* times ) {
         return;
     if ( times->empty() || temps->empty() )
         return;
+    if ( times->size() <= 1)
+        return;
+
     _currentTime = times->last();
     _startTime = times->first();
-    _tempCurve.setSamples( times->data(), temps->data(), temps->size() );
+
+    double* x = times->data();
+    double* y = temps->data();
+    _tempCurve.setSamples( &(x[_timesFrameOffset]), &(y[_timesFrameOffset]), temps->size() -_timesFrameOffset );
     replot();
 }

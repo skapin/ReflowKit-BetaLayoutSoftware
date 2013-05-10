@@ -12,7 +12,14 @@ TARGET = ReflowKitController
 TEMPLATE = app
 
 CONFIG += qwt
-INCLUDEPATH += /usr/local/qwt-6.0.3-svn/include
+
+
+unix {
+    INCLUDEPATH += /usr/local/qwt-6.0.3-svn/include
+}
+win32 {
+    INCLUDEPATH += E:/qwt-6.0/src
+}
 LIBS += -L/usr/local/qwt-6.0.3-svn/lib -lqwt
 
 SOURCES += main.cpp\

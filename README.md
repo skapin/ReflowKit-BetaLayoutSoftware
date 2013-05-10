@@ -19,11 +19,12 @@ This software need :
     sudo apt-get install qtcreator
     OR
     http://qt.digia.com/Try-Qt-Now/
-    Note : Qt5 is now available, enjoy :)
-    
 -Qwt
     http://qwt.sourceforge.net/
     svn checkout svn://svn.code.sf.net/p/qwt/code/branches/qwt-6.0 
+!!! WARNING!!!    
+QWT seems not to work with Qt5.X !! (For win)
+You need Qt4.8 !
 
 Compilation
 ============================

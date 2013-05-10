@@ -21,6 +21,7 @@ GraphTemp::GraphTemp(QWidget *parent) :
     _phtCurve.setPen( QPen(Qt::darkYellow,2, Qt::DashDotLine) );
     _soakCurve.setPen( QPen(Qt::red,2, Qt::DashDotDotLine) );
     _dwellCurve.setPen( QPen(Qt::darkCyan,2, Qt::DotLine) );
+    _timesFrameOffset = 0;
 
     QPen pen;
     pen.setWidth(3);

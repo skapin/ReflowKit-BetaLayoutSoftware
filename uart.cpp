@@ -38,8 +38,9 @@ int Uart::openDevice()
 {
 
 #ifdef WIN32
-
-    _device = CreateFile( L"COM4", GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+    std::wstring portname_wstring = std::wstring( _portName.begin(), _portName.end() );
+    LPCWSTR portname_cwstring = portname_wstring.c_str();
+    _device = CreateFile( portname_cwstring, GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
     if ( _device == INVALID_HANDLE_VALUE)
     {
         if ( GetLastError() == ERROR_FILE_NOT_FOUND)

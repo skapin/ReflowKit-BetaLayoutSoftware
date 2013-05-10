@@ -6,6 +6,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this); // setup the UI
+#ifdef unix
+    ui->pathToDevice->setText("/dev/ttyUSB0");
+#endif
+#ifdef WIN32
+    ui->pathToDevice->setText("COM4");
+#endif
     setWindowTitle("ReflowKit Controller");
     updateUiComponents();//Update UI component value, based on ReflowController Value.
 

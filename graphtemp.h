@@ -36,6 +36,7 @@ signals:
     
 public slots:
     void setTimeFrameOfset( int offset );
+    void resetGraph();
 private:
     QwtPlotGrid _grid;
     QwtLegend _legend;

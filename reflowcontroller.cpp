@@ -2,7 +2,7 @@
 
 
 int ReflowController::MAX_DATAS_STORED = 16;
-int ReflowController::MAX_SIZE_TEMP_LIST=1024;
+int ReflowController::MAX_SIZE_TEMP_LIST=4096;
 
 ReflowController::ReflowController(QObject *parent) : QObject(parent)
 {
@@ -56,6 +56,11 @@ QStringList* ReflowController::getDatas() {
     return _datas;
 }
 
+void ReflowController::resetTimeTemps() {
+    _temps.clear();
+    _times.clear();
+}
+
 void ReflowController::exportCVS(string path, char separator ) {
     ofstream cvs_file( path.c_str(), ios::out | ios::trunc);
 
@@ -101,11 +106,13 @@ void ReflowController::addTemp(double temp, double time) {
     }
     _times.append( time );
     _temps.append( temp );
+    if ( _times.first() > time )
+        resetTimeTemps();
 }
 
 void ReflowController::parseUart( string data ) {
 
-    QRegExp temp_reg("(OFF|ON),\\s*(\\d+),\\s*.(\\d+),\\s*degC");
+    QRegExp temp_reg("(OFF|ON|Soak|Preheat|Reflow|Dwell|learn|Learn),\\s*(\\d+),\\s*.(\\d+),\\s*degC");
     QRegExp config_reg("([a-z+-]{3,})\\s*(\\d{1,})");
 
     QString d( data.c_str() ) ;
@@ -120,6 +127,7 @@ void ReflowController::parseUart( string data ) {
 
         _currentTemp = temp_reg.cap(3).toInt();
         addTemp( (double)(temp_reg.cap(3).toInt()), (double)(temp_reg.cap(2).toInt()) );
+        state = temp_reg.cap(1).toStdString();
     }
     //********CONFIG**********
     pos = 0;

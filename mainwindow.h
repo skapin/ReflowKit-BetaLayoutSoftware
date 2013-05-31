@@ -79,6 +79,10 @@ private slots:
 
     void on_forceUpdate_clicked();
 
+    void on_pushButton_2_clicked();
+
+    void on_editButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 
@@ -86,6 +90,8 @@ private:
     QTimer _tempGraphTimer;
     QTimer _uiRefreshTimer;
     ReflowController _reflowC;
+    bool _canEditValue;
+    void setEditValue( bool enable );
 
 };
 

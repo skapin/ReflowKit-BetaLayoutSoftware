@@ -46,6 +46,10 @@ void GraphTemp::setTimeFrameOfset(int offset) {
     _timesFrameOffset = offset;
 }
 
+void GraphTemp::resetGraph() {
+    _tempCurve.setSamples( 0, 0, 0 );
+}
+
 void GraphTemp::setLine(QwtPlotCurve *curve, int value, string legendName) {
     double x[2]= {_startTime+_timesFrameOffset, _currentTime};
     double y[2] ={0.0,0.0};
@@ -86,6 +90,9 @@ void GraphTemp::setTempCurve( QVector<double>* temps, QVector<double>* times ) {
 
     _currentTime = times->last();
     _startTime = times->first();
+    //if new timer, cause reflow start or something, we need to reset the graph to prevent false output curves
+    if ( _currentTime < _startTime )
+        resetGraph();
 
     double* x = times->data();
     double* y = temps->data();

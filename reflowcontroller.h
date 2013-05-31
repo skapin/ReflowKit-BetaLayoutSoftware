@@ -107,6 +107,7 @@ public:
     int getCurrentTemp();
     QVector<double>* getTemps();
     QVector<double>* getTimes();
+    void resetTimeTemps();
 
     /**
      * @brief addTemp add the given temp and time inside _temps and _times QVector.
@@ -120,6 +121,8 @@ public:
      * @return
      */
     QStringList* getDatas();
+
+    string state;
 public slots:
     /**
      * @brief updateInformation  send the "showall" command, so the reflowController can parse the configuration received

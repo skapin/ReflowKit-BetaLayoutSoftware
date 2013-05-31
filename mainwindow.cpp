@@ -15,6 +15,8 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowTitle("ReflowKit Controller");
     updateUiComponents();//Update UI component value, based on ReflowController Value.
 
+    setEditValue( false );
+
     /*_graphTemp = new GraphicalTemp(400,400,this);
     _graphTemp->setGeometry(50,50,400,400);*/
 
@@ -38,6 +40,34 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::setEditValue(bool enable) {
+    _canEditValue = enable;
+
+    ui->phttemp->setReadOnly( !enable );
+    ui->phttime->setReadOnly( !enable );
+    ui->phtpwr->setReadOnly( !enable );
+
+    ui->reflowtemp->setReadOnly( !enable );
+    ui->reflowtime->setReadOnly( !enable );
+    ui->reflowpwr->setReadOnly( !enable );
+
+    ui->soaktemp->setReadOnly( !enable );
+    ui->soaktime->setReadOnly( !enable );
+    ui->soakpwr->setReadOnly( !enable );
+
+    ui->dwelltemp->setReadOnly( !enable );
+    ui->dwelltime->setReadOnly( !enable );
+    ui->dwellpwr->setReadOnly( !enable );
+    ui->tempoffset->setReadOnly( !enable );
+    if ( enable ) {
+        ui->editButton->setText("Update valeurs");
+    }
+    else {
+        ui->editButton->setText("Editer");
+    }
+
+}
+
 void MainWindow::on_refreshTime_valueChanged(int arg1)
 {
     _tempGraphTimer.setInterval( arg1*1000 );
@@ -49,22 +79,25 @@ void MainWindow::updateUiComponents() {
 
     ui->frameGraphTempSlider->setMaximum( _reflowC.getTemps()->size()-1 ); // maximum of data stored, i.e max of data show :)
 
-    ui->phttemp->setValue( _reflowC.getPhtTemp() );
-    ui->phttime->setValue( _reflowC.getPhtTime() );
-    ui->phtpwr->setValue( _reflowC.getPhtPwr() );
+    if ( !_canEditValue ) {
+        ui->phttemp->setValue( _reflowC.getPhtTemp() );
+        ui->phttime->setValue( _reflowC.getPhtTime() );
+        ui->phtpwr->setValue( _reflowC.getPhtPwr() );
 
-    ui->reflowtemp->setValue( _reflowC.getReflowTemp() );
-    ui->reflowtime->setValue( _reflowC.getReflowTime() );
-    ui->reflowpwr->setValue( _reflowC.getReflowPwr() );
+        ui->reflowtemp->setValue( _reflowC.getReflowTemp() );
+        ui->reflowtime->setValue( _reflowC.getReflowTime() );
+        ui->reflowpwr->setValue( _reflowC.getReflowPwr() );
 
-    ui->soaktemp->setValue( _reflowC.getSoakTemp() );
-    ui->soaktime->setValue( _reflowC.getSoakTime() );
-    ui->soakpwr->setValue( _reflowC.getSoakPwr() );
+        ui->soaktemp->setValue( _reflowC.getSoakTemp() );
+        ui->soaktime->setValue( _reflowC.getSoakTime() );
+        ui->soakpwr->setValue( _reflowC.getSoakPwr() );
 
-    ui->dwelltemp->setValue( _reflowC.getDwellTemp() );
-    ui->dwelltime->setValue( _reflowC.getDwellTime() );
-    ui->dwellpwr->setValue( _reflowC.getDwellPwr() );
-    ui->tempoffset->setValue( _reflowC.getTempoffset() );
+        ui->dwelltemp->setValue( _reflowC.getDwellTemp() );
+        ui->dwelltime->setValue( _reflowC.getDwellTime() );
+        ui->dwellpwr->setValue( _reflowC.getDwellPwr() );
+        ui->tempoffset->setValue( _reflowC.getTempoffset() );
+        ui->stateLabel->setText( _reflowC.state.c_str() );
+    }
 
     QStringList* list = _reflowC.getDatas();
     QString s;
@@ -217,4 +250,14 @@ void MainWindow::on_forceUpdate_clicked()
 {
     _reflowC.updateInformation();
     this->updateUiComponents();
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    _reflowC.resetTimeTemps();
+}
+
+void MainWindow::on_editButton_clicked()
+{
+    setEditValue( !_canEditValue );
 }

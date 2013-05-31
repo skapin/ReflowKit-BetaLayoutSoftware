@@ -26,11 +26,13 @@ SOURCES += main.cpp\
         mainwindow.cpp\
     uart.cpp \
     reflowcontroller.cpp \
-    graphtemp.cpp
+    graphtemp.cpp \
+    arduinocontroller.cpp
 
 HEADERS  += mainwindow.h\
     uart.h \
     reflowcontroller.h \
-    graphtemp.h
+    graphtemp.h \
+    arduinocontroller.h
 
 FORMS    += mainwindow.ui

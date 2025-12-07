@@ -57,15 +57,11 @@ public:
     bool readData( );
     string getData();
 
-
-
-
 private:
     string _portName;
     string _bufferedData;
-    void* _device;
-    baud_rate _currentBaudRate;
-
+    void* _device = NULL;
+    baud_rate _currentBaudRate = Uart::BR115200;
 };
 
 #endif // UART_H

@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
 #ifdef WIN32
     ui->pathToDevice->setText("COM4");
 #endif
-    setWindowTitle("ReflowKit Controller");
+    setWindowTitle(tr("ReflowKit Controller"));
     updateUiComponents();//Update UI component value, based on ReflowController Value.
 
     setEditValue( false );
@@ -60,10 +60,10 @@ void MainWindow::setEditValue(bool enable) {
     ui->dwellpwr->setReadOnly( !enable );
     ui->tempoffset->setReadOnly( !enable );
     if ( enable ) {
-        ui->editButton->setText("Update valeurs");
+        ui->editButton->setText(tr("Update values"));
     }
     else {
-        ui->editButton->setText("Editer");
+        ui->editButton->setText(tr("Edit"));
     }
 
 }
@@ -114,19 +114,19 @@ void MainWindow::on_connectButton_clicked()
 {
     if ( _reflowC.getUartDevice()->isDeviceOpen() ) {
         _reflowC.closeDevice();
-        ui->connectButton->setText("Connect");
-        ui->statusBar->showMessage("The device is disconnected.");
+        ui->connectButton->setText(tr("Connect"));
+        ui->statusBar->showMessage(tr("The device is disconnected."));
     }
     else {
-        ui->statusBar->showMessage("Trying a connection to the device...");
+        ui->statusBar->showMessage(tr("Trying to connect to the device…"));
         if ( _reflowC.openDevice( ui->pathToDevice->text().toStdString() ) )
         {
             _reflowC.updateInformation();
-            ui->connectButton->setText("Disconnect");
-            ui->statusBar->showMessage("Device connected.");
+            ui->connectButton->setText(tr("Disconnect"));
+            ui->statusBar->showMessage(tr("Device connected."));
         }
         else
-            ui->statusBar->showMessage("Can't connect to the device...");
+            ui->statusBar->showMessage(tr("Can't connect to the device."));
     }
 
 
@@ -137,7 +137,7 @@ void MainWindow::on_consoleCommand_returnPressed()
     if ( ui->consoleCommand->text() != "" )
     {
         _reflowC.getUartDevice()->send( ui->consoleCommand->text().toStdString() );
-        ui->statusBar->showMessage( "Sendind command from console inpute : "+ui->consoleCommand->text() );
+        ui->statusBar->showMessage( "Sending command from console input: "+ui->consoleCommand->text() );
     }
     else
         ui->statusBar->showMessage( "" );
@@ -165,85 +165,38 @@ void MainWindow::on_clearButton_clicked()
     ui->consoleOutput->clear();
 }
 
-void MainWindow::on_phttemp_valueChanged(int arg1)
-{
-    _reflowC.setPhtTemp( arg1 );
-}
-
-void MainWindow::on_phttime_valueChanged(int arg1)
-{
-    _reflowC.setPhtTime( arg1 );
-}
-
-void MainWindow::on_phtpwr_valueChanged(int arg1)
-{
-    _reflowC.setPhtPwr( arg1 );
-}
-
-void MainWindow::on_soaktemp_valueChanged(int arg1)
-{
-    _reflowC.setSoakTemp( arg1 );
-}
-
-void MainWindow::on_soaktime_valueChanged(int arg1)
-{
-    _reflowC.setSoakTime( arg1 );
-}
-
-void MainWindow::on_soakpwr_valueChanged(int arg1)
-{
-    _reflowC.setSoakPwr( arg1 );
-}
-
-void MainWindow::on_reflowtemp_valueChanged(int arg1)
-{
-    _reflowC.setReflowTemp( arg1 );
-}
-
-void MainWindow::on_reflowtime_valueChanged(int arg1)
-{
-    _reflowC.setReflowTime( arg1 );
-}
-
-void MainWindow::on_reflowpwr_valueChanged(int arg1)
-{
-    _reflowC.setReflowPwr( arg1 );
-}
-
-void MainWindow::on_dwelltemp_valueChanged(int arg1)
-{
-    _reflowC.setDwellTemp( arg1 );
-}
-
-void MainWindow::on_dwelltime_valueChanged(int arg1)
-{
-    _reflowC.setDwellTime( arg1 );
-}
-
-void MainWindow::on_dwellpwr_valueChanged(int arg1)
-{
-    _reflowC.setDwellPwr( arg1 );
-}
-
-void MainWindow::on_refreshTimeUi_valueChanged(int arg1)
-{
-    _uiRefreshTimer.setInterval( arg1*1000 );
-}
+void MainWindow::on_phttemp_valueChanged(int val) { _reflowC.setPhtTemp(val); }
+void MainWindow::on_phttime_valueChanged(int val) { _reflowC.setPhtTime(val); }
+void MainWindow::on_phtpwr_valueChanged(int val) { _reflowC.setPhtPwr(val); }
+void MainWindow::on_soaktemp_valueChanged(int val) { _reflowC.setSoakTemp(val); }
+void MainWindow::on_soaktime_valueChanged(int val) { _reflowC.setSoakTime(val); }
+void MainWindow::on_soakpwr_valueChanged(int val) { _reflowC.setSoakPwr(val); }
+void MainWindow::on_reflowtemp_valueChanged(int val) { _reflowC.setReflowTemp(val); }
+void MainWindow::on_reflowtime_valueChanged(int val) { _reflowC.setReflowTime(val); }
+void MainWindow::on_reflowpwr_valueChanged(int val) { _reflowC.setReflowPwr(val); }
+void MainWindow::on_dwelltemp_valueChanged(int val) { _reflowC.setDwellTemp(val); }
+void MainWindow::on_dwelltime_valueChanged(int val) { _reflowC.setDwellTime(val); }
+void MainWindow::on_dwellpwr_valueChanged(int val) { _reflowC.setDwellPwr(val); }
+void MainWindow::on_tempoffset_valueChanged(int val) { _reflowC.setTempoffset(val); }
+void MainWindow::on_refreshTimeUi_valueChanged(int val) { _uiRefreshTimer.setInterval(val*1000); }
 
 void MainWindow::on_learnButton_clicked()
 {
     _reflowC.startLearning();
 }
 
-void MainWindow::on_tempoffset_valueChanged(int arg1)
-{
-    _reflowC.setTempoffset( arg1 );
-}
-
 void MainWindow::on_pushButton_clicked()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "./log_reflowkit.cvs");
-    _reflowC.exportCVS( fileName.toStdString(), ',' );
+    auto utc_datetime = std::chrono::system_clock::now();
+    auto tz = std::chrono::current_zone();
+    auto local_datetime = std::chrono::zoned_time{tz, utc_datetime};
+    std::string filename = std::format("./{0:%F}T{0:%H%M}_reflowkit.csv", local_datetime);
+
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), filename.c_str());
+    if (fileName != "") {
+        // Dialog was not canceled.
+        _reflowC.exportCSV(fileName.toStdString(), ',');
+    }
 }
 
 void MainWindow::on_forceUpdate_clicked()

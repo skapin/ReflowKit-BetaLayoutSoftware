@@ -37,7 +37,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="refreshTimeLabel">
        <property name="text">
-        <string>Refresh time (sec.) :  </string>
+        <string>Refresh time (s):  </string>
        </property>
       </widget>
      </item>
@@ -89,7 +89,7 @@
      <item row="0" column="1">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Temp (°c)</string>
+        <string>Temp (°C)</string>
        </property>
       </widget>
      </item>
@@ -141,7 +141,7 @@
      <item row="1" column="1">
       <widget class="QLabel" name="label_17">
        <property name="text">
-        <string>Temp (°c)</string>
+        <string>Temp (°C)</string>
        </property>
       </widget>
      </item>
@@ -193,7 +193,7 @@
      <item row="2" column="1">
       <widget class="QLabel" name="label_21">
        <property name="text">
-        <string>Temp (°c)</string>
+        <string>Temp (°C)</string>
        </property>
       </widget>
      </item>
@@ -245,7 +245,7 @@
      <item row="3" column="1">
       <widget class="QLabel" name="label_25">
        <property name="text">
-        <string>Temp (°c)</string>
+        <string>Temp (°C)</string>
        </property>
       </widget>
      </item>
@@ -302,7 +302,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Console :</string>
+        <string>Console:</string>
        </property>
       </widget>
      </item>
@@ -347,7 +347,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="refreshTimeUiLabel">
        <property name="text">
-        <string>Refresh time (sec.) :  </string>
+        <string>Refresh time (s):  </string>
        </property>
       </widget>
      </item>
@@ -379,7 +379,7 @@ font: 75 oblique 16pt &quot;DejaVu Sans&quot;;
 background-color: rgb(255, 253, 255);</string>
     </property>
     <property name="text">
-     <string>°c</string>
+     <string>°C</string>
     </property>
    </widget>
    <widget class="QPushButton" name="learnButton">
@@ -431,7 +431,7 @@ background-color: rgb(255, 253, 255);</string>
      <item row="0" column="0">
       <widget class="QLabel" name="label_6">
        <property name="text">
-        <string>Temp. offset :</string>
+        <string>Temp. offset:</string>
        </property>
       </widget>
      </item>
@@ -473,7 +473,7 @@ background-color: rgb(255, 253, 255);</string>
      </rect>
     </property>
     <property name="text">
-     <string>Effacer Graphique</string>
+     <string>Clear Graph</string>
     </property>
    </widget>
    <widget class="QLabel" name="stateLabel">
@@ -503,7 +503,7 @@ background-color: rgba(255, 255, 255, 119);</string>
      </rect>
     </property>
     <property name="text">
-     <string>Editer</string>
+     <string>Edit</string>
     </property>
    </widget>
    <zorder>layoutWidget</zorder>

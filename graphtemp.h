@@ -31,9 +31,9 @@ public:
     void setDWellCurve(int value);
     void setPhtCurve(int value);
     void setLine(QwtPlotCurve* curve, int value, string legendName);
-    
+
 signals:
-    
+
 public slots:
     void setTimeFrameOfset( int offset );
     void resetGraph();

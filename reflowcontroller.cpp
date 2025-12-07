@@ -1,31 +1,10 @@
 #include "reflowcontroller.h"
 
-
 int ReflowController::MAX_DATAS_STORED = 16;
 int ReflowController::MAX_SIZE_TEMP_LIST=4096;
 
 ReflowController::ReflowController(QObject *parent) : QObject(parent)
 {
-    _phttemp=0;
-    _phttime=0;
-    _phtpwr=0;
-
-    _soaktemp=0;
-    _soaktime=0;
-    _soakpwr=0;
-
-    _reflowtemp=0;
-    _reflowtime=0;
-    _reflowpwr=0;
-
-    _dwelltemp=0;
-    _dwelltime=0;
-    _dwellpwr=0;
-
-    _tempoffset=0;
-    _currentTemp=0;
-    _tempshow=2;
-
     _datas = new QStringList();
     _uart = new Uart();
 }
@@ -40,20 +19,16 @@ void ReflowController::updateInformation() {
 
 bool ReflowController::openDevice(string path) {
     _uart = new Uart( path );
-    if ( _uart->openDevice() < 0 )
-    {
-        return false;
-    }
-    else
+    if (_uart->openDevice())
     {
         _uart->setInterfaceAttrib(Uart::BR9600, 0);
         _uart->setBlocking(0);
     }
+    else
+    {
+        return false;
+    }
     return _uart->isDeviceOpen();
-}
-
-QStringList* ReflowController::getDatas() {
-    return _datas;
 }
 
 void ReflowController::resetTimeTemps() {
@@ -61,22 +36,22 @@ void ReflowController::resetTimeTemps() {
     _times.clear();
 }
 
-void ReflowController::exportCVS(string path, char separator ) {
-    ofstream cvs_file( path.c_str(), ios::out | ios::trunc);
+void ReflowController::exportCSV(string path, char separator ) {
+    ofstream csv_file( path.c_str(), ios::out | ios::trunc);
 
-    if(cvs_file)
+    if(csv_file)
     {
         int size = _temps.size();
         if ( size == _times.size() ) {
             for ( int i=0; i < size ; ++i) {
-                cvs_file << _times.at( i ) << separator << _temps.at(i) <<endl;
+                csv_file << _times.at( i ) << separator << _temps.at(i) <<endl;
             }
 
         }
-        cvs_file.close();
+        csv_file.close();
     }
     else  // sinon
-        cerr << "Error while opening CVS file " << path << endl;
+        cerr << "Error while opening CSV file " << path << endl;
 }
 
 void ReflowController::checkUartDataReady() {
@@ -111,14 +86,11 @@ void ReflowController::addTemp(double temp, double time) {
 }
 
 void ReflowController::parseUart( string data ) {
-
-    QRegExp temp_reg("(OFF|ON|Soak|Preheat|Reflow|Dwell|learn|Learn),\\s*(\\d+),\\s*.(\\d+),\\s*degC");
+    QRegExp temp_reg("(OFF|ON|Soak|Preheat|Reflow|Dwell|learn|Learn),\\s*(\\d+),\\s*.(\\d+),\\s*(degC|C)");
     QRegExp config_reg("([a-z+-]{3,})\\s*(\\d{1,})");
 
     QString d( data.c_str() ) ;
     int pos = 0;
-
-
 
     //*********TEMP***********
     pos = 0;
@@ -167,19 +139,6 @@ void ReflowController::parseUart( string data ) {
         else if ( variable_name.compare("tempoffset") == 0 )
             _tempoffset = value;
     }
-
-}
-
-QVector<double>* ReflowController::getTemps() {
-    return &_temps;
-}
-
-QVector<double>* ReflowController::getTimes() {
-    return &_times;
-}
-
-Uart* ReflowController::getUartDevice() {
-    return _uart;
 }
 
 void ReflowController::closeDevice() {
@@ -189,10 +148,6 @@ void ReflowController::closeDevice() {
 }
 
 //******************** SET/GET***********************************************
-
-int ReflowController::getCurrentTemp() {
-    return _currentTemp;
-}
 
 void ReflowController::setPhtTemp( int v ) {
     if ( v >= 0 &&  v <= 254 ) {
@@ -214,18 +169,21 @@ void ReflowController::setPhtPwr( int v ) {
         _uart->send("phtpwr "+QString::number(v).toStdString());
     }
 }
+
 void ReflowController::setSoakTemp( int v ) {
     if ( v >= 0 &&  v <= 254 ) {
         _soaktemp = v;
         _uart->send("soaktemp "+QString::number(v).toStdString());
     }
 }
+
 void ReflowController::setSoakTime( int v ) {
     if ( v >= 0 &&  v <= 65534 ) {
         _soaktime = v;
         _uart->send("soaktime "+QString::number(v).toStdString());
     }
 }
+
 void ReflowController::setSoakPwr( int v ) {
     if ( v >= 0 &&  v <= 100 ) {
         _soakpwr = v;
@@ -239,12 +197,14 @@ void ReflowController::setReflowTemp( int v ) {
         _uart->send("reflowtemp "+QString::number(v).toStdString());
     }
 }
+
 void ReflowController::setReflowTime( int v ) {
     if ( v >= 0 &&  v <= 65534 ) {
         _reflowtime = v;
         _uart->send("reflowtime "+QString::number(v).toStdString());
     }
 }
+
 void ReflowController::setReflowPwr( int v ) {
     if ( v >= 0 &&  v <= 100 ) {
         _reflowpwr = v;
@@ -258,19 +218,20 @@ void ReflowController::setDwellTemp( int v ) {
         _uart->send("dwelltemp "+QString::number(v).toStdString());
     }
 }
+
 void ReflowController::setDwellTime( int v ) {
     if ( v >= 0 &&  v <= 65534 ) {
         _dwelltime = v;
         _uart->send("dwelltime "+QString::number(v).toStdString());
     }
 }
+
 void ReflowController::setDwellPwr( int v ) {
    if ( v >= 0 &&  v <= 100 ) {
        _dwellpwr = v;
        _uart->send("dwellpwr "+QString::number(v).toStdString());
    }
 }
-
 
 void ReflowController::setTempoffset( int v ) {
     if ( v >= -30 &&  v <= 30 ) {
@@ -284,51 +245,22 @@ void ReflowController::setTempShow( int v ) {
        _tempshow = v;
 }
 
-
-int ReflowController::getPhtTemp(  ) const {
-    return _phttemp;
-}
-
-int ReflowController::getPhtTime(  ) const {
-    return _phttime;
-}
-int ReflowController::getPhtPwr(  ) const {
-    return _phtpwr;
-}
-
-int ReflowController::getSoakTemp(  ) const {
-    return _soaktemp;
-}
-int ReflowController::getSoakTime(  ) const {
-    return _soaktime;
-}
-int ReflowController::getSoakPwr(  ) const {
-    return _soakpwr;
-}
-
-int ReflowController::getReflowTemp(  ) const {
-    return _reflowtemp;
-}
-int ReflowController::getReflowTime(  ) const {
-    return _reflowtime;
-}
-int ReflowController::getReflowPwr(  ) const {
-    return _reflowpwr;
-}
-
-int ReflowController::getDwellTemp( ) const {
-    return _dwelltemp;
-}
-int ReflowController::getDwellTime( ) const {
-    return _dwelltime;
-}
-int ReflowController::getDwellPwr(  ) const {
-    return _dwellpwr;
-}
-
-int ReflowController::getTempoffset(  ) const {
-    return _tempoffset;
-}
-int ReflowController::getTempShow( ) const {
-    return _tempshow;
-}
+QStringList* ReflowController::getDatas() { return _datas; }
+QVector<double>* ReflowController::getTemps() { return &_temps; }
+QVector<double>* ReflowController::getTimes() { return &_times; }
+Uart* ReflowController::getUartDevice() { return _uart; }
+int ReflowController::getCurrentTemp() { return _currentTemp; }
+int ReflowController::getPhtTemp() const { return _phttemp; }
+int ReflowController::getPhtTime() const { return _phttime; }
+int ReflowController::getPhtPwr() const { return _phtpwr; }
+int ReflowController::getSoakTemp() const { return _soaktemp; }
+int ReflowController::getSoakTime() const { return _soaktime; }
+int ReflowController::getSoakPwr() const { return _soakpwr; }
+int ReflowController::getReflowTemp() const { return _reflowtemp; }
+int ReflowController::getReflowTime() const { return _reflowtime; }
+int ReflowController::getReflowPwr() const { return _reflowpwr; }
+int ReflowController::getDwellTemp() const { return _dwelltemp; }
+int ReflowController::getDwellTime() const { return _dwelltime; }
+int ReflowController::getDwellPwr() const { return _dwellpwr; }
+int ReflowController::getTempoffset() const { return _tempoffset; }
+int ReflowController::getTempShow() const { return _tempshow; }

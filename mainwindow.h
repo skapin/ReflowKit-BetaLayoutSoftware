@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <QFileDialog>
 #include <qwt_plot.h>
+#include <chrono>
 
 #include "reflowcontroller.h"
 /**

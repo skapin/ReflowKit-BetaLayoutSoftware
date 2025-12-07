@@ -33,7 +33,7 @@ GraphTemp::GraphTemp(QWidget *parent) :
     // Define the brush ( color under the curve)
     QColor tempcolor( Qt::darkCyan );
     tempcolor.setAlpha( 40 );
-    _tempCurve.setTitle( "currentTemp" );
+    _tempCurve.setTitle( tr("Temperature") );
     _tempCurve.setBrush( tempcolor );
 
     // Fixe the X/Y axis scale
@@ -47,7 +47,9 @@ void GraphTemp::setTimeFrameOfset(int offset) {
 }
 
 void GraphTemp::resetGraph() {
-    _tempCurve.setSamples( 0, 0, 0 );
+    double x[1]= {0};
+    double y[1] ={0};
+    _tempCurve.setSamples( x, y, 0 );
 }
 
 void GraphTemp::setLine(QwtPlotCurve *curve, int value, string legendName) {

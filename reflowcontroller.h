@@ -44,11 +44,11 @@ public:
      */
     Uart* getUartDevice();
     /**
-     * @brief exportCVS save datas (_temps an _times) to the specified file, with CVS format.
+     * @brief exportCSV saves data (_temps an _times) to the specified file, with CSV format.
      * @param path path to the file to save
-     * @param separator the separator for CVS format
+     * @param separator the separator for CSV format
      */
-    void exportCVS(string path, char separator);
+    void exportCSV(string path, char separator);
 
 
     /**
@@ -130,26 +130,22 @@ public slots:
     void updateInformation();
 
 private:
-    int _phttemp;
-    int _phttime;
-    int _phtpwr;
+    int _phttemp = 0;
+    int _phttime = 0;
+    int _phtpwr = 0;
+    int _soaktemp = 0;
+    int _soaktime = 0;
+    int _soakpwr = 0;
+    int _reflowtemp = 0;
+    int _reflowtime = 0;
+    int _reflowpwr = 0;
+    int _dwelltemp = 0;
+    int _dwelltime = 0;
+    int _dwellpwr = 0;
+    int _tempoffset = 0;
+    int _tempshow = 2;
+    int _currentTemp = 0;
 
-    int _soaktemp;
-    int _soaktime;
-    int _soakpwr;
-
-    int _reflowtemp;
-    int _reflowtime;
-    int _reflowpwr;
-
-    int _dwelltemp;
-    int _dwelltime;
-    int _dwellpwr;
-
-    int _tempoffset;
-    int _tempshow;
-
-    int _currentTemp;
     Uart* _uart;
     static int MAX_DATAS_STORED;
     QStringList* _datas;

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ReflowKitController_de.qm</file>
+        <file>ReflowKitController_fr.qm</file>
+    </qresource>
+</RCC>
